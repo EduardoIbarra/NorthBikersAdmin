@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Editar Participante</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="saveParticipant(form)">
+    <mat-form-field appearance="standard" class="pad-5 width-100">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="" formControlName="name">
+    </mat-form-field>
+    <div>
+        <mat-form-field appearance="standard" class="pad-5 width-50">
+            <mat-label>Latitud</mat-label>
+            <input matInput placeholder="" formControlName="current_lat">
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="pad-5 width-50">
+            <mat-label>Longitud</mat-label>
+            <input matInput placeholder="" formControlName="current_lng">
+        </mat-form-field>
+    </div>
+    <mat-form-field appearance="standard" class="pad-5 width-100">
+        <mat-label>Puntos</mat-label>
+        <input matInput placeholder="" formControlName="points">
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="standard" class="pad-5 width-100">
+        <mat-label>Número Participante</mat-label>
+        <input matInput placeholder="" formControlName="participant_number">
+    </mat-form-field>
+    <br>
+    <div>
+        <mat-form-field appearance="standard" class="pad-5 width-50">
+            <mat-label>Categoría</mat-label>
+            <mat-select name="categories" formControlName="category">
+                <mat-option *ngFor="let category of CATEGORIES" [value]="category.id">
+                  {{ category.title }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="pad-5 width-50">
+            <mat-label>Género</mat-label>
+            <mat-select name="gender" formControlName="gender">
+                <mat-option *ngFor="let gender of GENDERS" [value]="gender.id">
+                    {{ gender.title }}
+                  </mat-option>
+              </mat-select>
+        </mat-form-field>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions class="align-right">
+  <button mat-flat-button color="warn" (click)="onNoClick()">Cancelar</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="" cdkFocusInitial>Aceptar</button>
+</div>
