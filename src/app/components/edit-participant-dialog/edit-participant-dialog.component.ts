@@ -3,17 +3,19 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface DialogData {
-  id: string,
-  position: Int16Array,
-  points: Int16Array,
-  participant_number: Int16Array,
-  name: string,
-  category: string,
-  email: string,
-  title: string,
+  participant:{
+    id: string,
+    position: Int16Array,
+    points: Int16Array,
+    participant_number: Int16Array,
+    name: string,
+    email: string,
+    title: string,
+    checkins: Int16Array,
+    challenges: Int16Array
+  },
   gender: string,
-  checkins: Int16Array,
-  challenges: Int16Array
+  category: string
 };
 
 @Component({
@@ -44,10 +46,10 @@ export class EditParticipantDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditParticipantDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { 
-    console.log(data['name']);
-    this.form.controls['name'].setValue(data['name']);
-    this.form.controls['points'].setValue(data.points);
-    this.form.controls['participant_number'].setValue(data.participant_number);
+    console.log(data);
+    this.form.controls['name'].setValue(data.participant.name);
+    this.form.controls['points'].setValue(data.participant.points);
+    this.form.controls['participant_number'].setValue(data.participant.participant_number);
     this.form.controls['category'].setValue(data.category);
     this.form.controls['gender'].setValue(data.gender);
   }

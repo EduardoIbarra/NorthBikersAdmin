@@ -16,6 +16,45 @@
       </mat-select>
     </mat-form-field>
   </mat-card>
+  <mat-card>
+    <form [formGroup]="searchForm">
+      <div class="row">
+        <mat-form-field class="width-30 mr-2">
+          <mat-label>Buscar participantes</mat-label>
+          <input matInput formControlName="searchName" (keyup)="filterParticipants('name', $event)">
+        </mat-form-field>
+        <mat-form-field class="width-30 mr-2">
+          <mat-label>Filtrar por categoría</mat-label>
+          <mat-select name="searchCategory" formControlName="searchCategory" (selectionChange)="filterParticipants('category', $event)">
+            <mat-option *ngFor="let category of CATEGORIES" [value]="category.id">
+              {{ category.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="width-30">
+          <mat-label>Filtrar por género</mat-label>
+          <mat-select name="searchGender" formControlName="searchGender" (selectionChange)="filterParticipants('gender', $event)">
+            <mat-option *ngFor="let gender of GENDERS" [value]="gender.id">
+              {{ gender.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field>
+          <mat-label>Ordernar por</mat-label>
+          <mat-select name="searchOrder" formControlName="searchOrder" (selectionChange)="filterParticipants('order', $event)">
+            <mat-option value="points">
+              Puntos
+            </mat-option>
+            <mat-option value="participantName">
+              Nombre
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card>
   <br>
   <mat-card class="row">
     <table class="table">
@@ -35,7 +74,7 @@
           </tr>
         </thead>
         <tbody class="table-group-divider" *ngFor="let participant of participantsList">
-          <tr>
+          <tr (click)="showCheckins(participant.id)" class="cursor-pointer bg-gray-hover">
             <th><button mat-icon-button><mat-icon mat-list-icon (click)="editParticipant(participant.id)">
               edit
             </mat-icon></button></th>

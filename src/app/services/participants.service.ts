@@ -17,10 +17,10 @@ export class ParticipantsService {
 
   getEventProfileWithDetail = (routeId:any) => {
     return this.supabase.from(`event_profile`)
-    .select(`*,
-    profile: profile_id (*),
-    route: route_id (*)`)
-    .eq('route_id', routeId)
-    .order('points', {ascending: false});
+      .select(`*,
+      profile: profile_id (*),
+      route: route_id (*)`)
+      .eq('route_id', routeId)
+      .order('points', {ascending: false});
   }
 }

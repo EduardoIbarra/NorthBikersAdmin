@@ -24,3 +24,47 @@ body {
 .width-50 {
     width: 47%;
 }
+
+.width-33 {
+    width: 33%;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+p {
+    margin: 0px !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.bg-gray-hover:hover {
+    background-color: rgba(243, 244, 246, 1);
+}
+
+.bg-gray {
+    background-color: rgba(243, 244, 246, 1);
+}
+
+.mr-2 {
+    margin-right: 0.5rem !important;
+}
+
+.flex {
+    display: flex;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+.width-30 {
+    width: 30%;
+}

@@ -1,0 +1,34 @@
+.checkin-container {
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    padding: 0.5rem;
+    align-items: center;
+}
+
+.checkin-img {
+    display: inline;
+    text-align: left;
+    width: 4rem;
+    object-fit: cover;
+    height: 4rem;
+    border-radius: 9999px;
+    margin-right: 0.5rem;
+    max-width: 100%;
+}
+
+.checkin-info {
+    display: grid;
+    padding-right: 2rem;
+}
+
+.checkin-dialog-container {
+    display: flex;
+    position: relative;
+    height: 450px;
+}
+
+.checkins-list {
+    list-style: none !important;
+    padding-inline-start: 0px !important;
+}

@@ -63,6 +63,10 @@ import {OverlayModule} from '@angular/cdk/overlay';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import {DialogModule} from '@angular/cdk/dialog';
 import { EditParticipantDialogComponent } from './components/edit-participant-dialog/edit-participant-dialog.component';
+import { CheckInsParticipantDialogComponent } from './components/check-ins-participant-dialog/check-ins-participant-dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 
 const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
@@ -84,6 +88,8 @@ const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
     EventConfigurationComponent,
     ParticipantsComponent,
     EditParticipantDialogComponent,
+    CheckInsParticipantDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -93,7 +99,7 @@ const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
     ReactiveFormsModule,
     HttpClientModule,
     MatDatepickerModule,
-    //NgxMatDatetimePickerModule,
+    NgxMatDatetimePickerModule,
     MatInputModule,
     MatToolbarModule,
     A11yModule,
@@ -142,7 +148,9 @@ const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
     OverlayModule,
     PortalModule,
     ScrollingModule,
-    DialogModule
+    DialogModule,
+    FlexLayoutModule,
+    GoogleMapsModule
   ],
   exports: [
     A11yModule,
@@ -192,6 +200,7 @@ const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
     PortalModule,
     ScrollingModule,
     DialogModule,
+    FlexLayoutModule
   ],
   providers: [
     {

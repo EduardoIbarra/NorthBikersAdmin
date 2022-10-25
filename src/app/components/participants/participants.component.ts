@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckInsService } from 'src/app/services/check-ins.service';
 import { ParticipantsService } from 'src/app/services/participants.service';
 import { Routes, RouteService } from 'src/app/services/route.service';
+import { CheckInsParticipantDialogComponent } from '../check-ins-participant-dialog/check-ins-participant-dialog.component';
 import { EditParticipantDialogComponent } from '../edit-participant-dialog/edit-participant-dialog.component';
 
 @Component({
@@ -16,6 +18,12 @@ export class ParticipantsComponent implements OnInit {
   public routes: Routes[] | any;
   public result: any;
   selectedRouteId: any;
+  searchForm: FormGroup = new FormGroup({
+    searchName: new FormControl(''),
+    searchCategory: new FormControl(''),
+    searchGender: new FormControl(''),
+    searchOrder: new FormControl('')
+  });
   CATEGORIES = [
       {id: 'DUAL_SPORT', title: 'Doble Propósito'},
       {id: 'DIRT', title: 'Terracería'},
@@ -42,18 +50,25 @@ export class ParticipantsComponent implements OnInit {
   }
 
   getParticipants = async (event: any) => {
-    console.log(event.value);
     this.selectedRouteId = event.value;
-    console.log(this.selectedRouteId);
-    this.participantsService.getEventProfileWithDetail(this.selectedRouteId).then(async response => {
+    this.getEventProfileDetails(this.selectedRouteId);
+  }
+
+  getEventProfileDetails(routeId: any) {
+    this.participantsList = [];
+    this.participants = [];
+    console.log(this.searchForm.value.searchName);
+    this.participantsService.getEventProfileWithDetail(routeId).then(async response => {
       this.result = response.data;
       console.log(this.result);
+      let checkins = await this.getCheckinsWithCheckpoint(routeId);
+      let challenges = await this.getChallengesWithCheckpoint(routeId);
       for(var i = 0; i < this.result.length; i++)
       {
         let category = this.CATEGORIES.filter(c => { return c.id == this.result[i].category })[0];
         let gender = this.GENDERS.filter(g => { return g.id.toLowerCase() == this.result[i].gender })[0];
-        let checkins = await this.getCheckins(this.selectedRouteId, this.result[i].profile.id);
-        let challenges = await this.getChallenges(this.selectedRouteId, this.result[i].profile.id);
+        let checkinsParticipant = checkins?.filter(c => { return c.profile_id == this.result[i].profile.id });
+        let challengesParticipant = challenges?.filter(c => { return c.profile_id == this.result[i].profile.id });
         this.participants.push({
           id: this.result[i].profile.id,
           position: i+1,
@@ -64,41 +79,87 @@ export class ParticipantsComponent implements OnInit {
           email: this.result[i].profile.email,
           title: this.result[i].route.title,
           gender: gender?.title,
-          checkins: checkins,
-          challenges: challenges
+          checkins: checkinsParticipant?.length,
+          challenges: challengesParticipant?.length,
+          profile: this.result[i].profile,
+          category_id: this.result[i].category,
+          gender_id: this.result[i].gender
         });
       }
       this.participantsList = this.participants;
     });
   }
 
-  getCheckins = async (routeId: any, profileId: any) => {
-    return await this.checkinsService.getCheckins(routeId, profileId).then(response => {
-      return response.data?.length;
+  getCheckinsWithCheckpoint = async (routeId: any) => {
+    return await this.checkinsService.getCheckinsWithCheckpoints(routeId).then(response => {
+      return response.data;
     });
   }
 
-  getChallenges = async (routeId: any, profileId: any) => {
-    return await this.checkinsService.getChallenges(routeId, profileId).then(response => {
-      return response.data?.length;
+  getChallengesWithCheckpoint = async (routeId: any) => {
+    return await this.checkinsService.getChallengesWithCheckpoints(routeId).then(response => {
+      return response.data;
     });
   }
-
-  /*editParticipant(participantId:any){
-    console.log(participantId);
-  }*/
 
   editParticipant(participantId:any): void {
     var participant = this.participants.filter(p => { return p.id == participantId });
+
+    let category = this.CATEGORIES.filter(c => { return c.title == participant[0].category })[0];
+    let gender = this.GENDERS.filter(g => { return g.title == participant[0].gender })[0];
     console.log(participant);
     const dialogRef = this.dialog.open(EditParticipantDialogComponent, {
       width: '500px',
-      data: participant,
+      data: {participant: participant[0], gender: gender.id, category: category.id} ,
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  showCheckins = async (participantId: any) => {
+    var checkins = await this.checkinsService.getAllCheckins(this.selectedRouteId, participantId).then(response => {
+      return response.data;
+    });
+    var profile = this.participantsList.filter(p => { return p.profile.id == participantId });
+    console.log(checkins);
+    console.log(profile);
+    const dialogRef = this.dialog.open(CheckInsParticipantDialogComponent, {
+      width: '1300px !important',
+      data: { profile: profile[0], checkins: checkins }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getEventProfileDetails(this.selectedRouteId);
+    });
+  }
+
+  filterParticipants(filterBy: any, event: any) {
+    this.participantsList = [];
+    console.log(this.participants);
+    console.log(event.value);
+    switch(filterBy) {
+      case 'name': this.participantsList = this.participants.filter(p => { 
+        if(p.profile.name.toLowerCase().includes(this.searchForm.value.searchName.toLowerCase())) {
+            return p;
+          }
+        });
+        break;
+
+      case 'gender': this.participantsList = this.participants.filter(p => {
+        return p.gender_id.toLowerCase() == event.value.toLowerCase()
+      });
+      break;
+
+      case 'category': this.participantsList = this.participants.filter(p => {
+        return p.category_id.toLowerCase() == event.value.toLowerCase()
+      });
+      break;
+
+      case 'order': event.value == 'points' ? this.participantsList = this.participants.sort((a, b) => (a.points > b.points) ? -1 : 1) : this.participantsList = this.participants.sort((a, b) => (a.profile.name < b.profile.name) ? -1 : 1);
+      break;
+    }
   }
 
 }
