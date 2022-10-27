@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>¿Seguro quieres {{ is_valid ? 'invalidar' : 'validar' }}?</h1>
+<div mat-dialog-content>
+    <mat-label>Si {{ is_valid ? 'invalidas' : 'validas' }} se le {{ is_valid ? 'restarán' : 'sumarán' }} {{ points }} puntos de este checkpoint.</mat-label>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="warn" (click)="close()">Cancelar</button>
+    <button mat-flat-button color="primary" (click)="updateIsValidCheckin()">Aceptar</button>
+</div>

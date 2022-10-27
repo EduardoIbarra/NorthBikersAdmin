@@ -1,0 +1,65 @@
+<h1 mat-dialog-title>Check-ins de {{ profile.name }}</h1>
+<div mat-dialog-content>
+    <div class="row mb-2">
+        Selecciona un check-in para verlo en el mapa
+    </div>
+    <div class="row">
+        <label>Fechas</label>
+        <br>
+        <div class="flex mb-2">
+            <p class="mr-2">
+                <b>Original</b>: <span>{{ moment(checkinSelected.id).format('dddd DD MMMM,  h:mm:ss A') }}</span>
+            </p>
+            |&nbsp;&nbsp;
+            <p class="mr-2">
+                <b>Creación</b>: <span>{{ moment(checkinSelected.created_at).format('dddd DD MMMM,  h:mm:ss A') }}</span>
+            </p>
+            |&nbsp;&nbsp;
+            <p class="mr-2">
+                <b>Actualización</b>: <span>{{ moment(checkinSelected.updated_at).format('dddd DD MMMM,  h:mm:ss A') }}</span>
+            </p>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="checkin-dialog-container">
+            <div class="width-33 overflow-auto">
+                <ul class="checkins-list">
+                    <li *ngFor="let checkin of checkins">
+                        <div class="checkin-container cursor-pointer bg-gray-hover" (click)="selectCheckin(checkin.id)" [ngClass]="checkin.id == checkinSelected.id ? 'bg-gray' : ''" >
+                            <div *ngIf='checkin.checkpoints.picture != ""'>
+                                <img class="checkin-img" [src]="checkin?.checkpoints?.picture?.includes('http') ? checkin.checkpoints.picture : 'https://aezxnubglexywadbjpgo.supabase.in/storage/v1/object/public/pictures/' + checkin.checkpoints.picture">
+                            </div>
+                            <div *ngIf='checkin.checkpoints.picture == ""'>
+                                <img class="checkin-img" src="./assets/icon.jpg">
+                            </div>
+                            <div class="checkin-info">
+                                <b>{{ checkin.checkpoints.name }}</b>
+                                <p>{{ checkin.checkpoints.description }}</p>
+                                <p><b>{{ checkin.checkpoints.points }} pts.</b> | A <b>{{ checkin.distance.toFixed(2) }}km</b> de Distancia </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="width-33">
+                <div *ngIf="apiLoaded | async">
+                    <google-map height="400px"
+                        width="750px"
+                        [center]="center"
+                        [zoom]="zoom"
+                        (mapClick)="moveMap($event)"
+                        (mapMousemove)="move($event)">
+                    </google-map>
+                </div>
+            </div>
+            <div class="width-33 overflow-auto">
+                <button *ngIf="checkinSelected.is_valid" mat-flat-button color="warn" class="width-100" (click)="updateIsValidCheckin()">INVALIDAR</button>
+                <button *ngIf="!checkinSelected.is_valid" mat-flat-button color="primary" class="width-100" (click)="updateIsValidCheckin()">VALIDAR</button>
+                <img class="width-100" src="https://aezxnubglexywadbjpgo.supabase.in/storage/v1/object/public/pictures/{{ checkinSelected.picture }}">
+            </div>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="primary" [mat-dialog-close]="" cdkFocusInitial>Cerrar</button>
+  </div>

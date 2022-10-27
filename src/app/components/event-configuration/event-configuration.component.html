@@ -1,0 +1,72 @@
+<form class="container" [formGroup]="routeForm">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Rutas</label>
+        <select class="form-select" aria-label="Default select example" (change)="getRouteInfo($event)">
+            <option selected>Seleccionar ruta</option>
+            <option *ngFor="let route of routes" [value]="route.id">{{route.title}}</option>
+        </select>
+    </div>
+    <div class="mb-3 row">
+        <label for="title" class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="title" formControlName="title">
+        </div>
+        <label for="description" class="col-sm-2 col-form-label">Descripción</label>
+        <div class="col-sm-4">
+            <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="start_timestamp" class="col-sm-2 col-form-label">Fecha Inicio</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="start_timestamp" formControlName="start_timestamp">
+        </div>
+        <label for="end_timestamp" class="col-sm-2 col-form-label">Fecha Fin</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="end_timestamp" formControlName="end_timestamp">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="banner" class="form-label col-sm-2">Banner</label>
+        <input class="form-control" type="file" id="banner" (change)="selectFile($event, 0)" formControlName="banner">
+    </div>
+    <div class="mb-3 row">
+        <label for="cover" class="form-label col-sm-2">Portada</label>
+        <input class="form-control" type="file" id="cover" (change)="selectFile($event, 1)" formControlName="cover">
+    </div>
+    <div class="mb-3 row">
+        <label for="rules_file" class="form-label col-sm-2">Reglas</label>
+        <input class="form-control" type="file" id="rules_file" (change)="selectFile($event, 2)" formControlName="rules_file">
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="active" formControlName="active">
+        <label class="form-check-label" for="active">
+          Activo
+        </label>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="rally" formControlName="rally">
+        <label class="form-check-label" for="rally">
+          Rally
+        </label>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="featured" formControlName="featured">
+        <label class="form-check-label" for="featured">
+          Destacar
+        </label>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="pinned" formControlName="pinned">
+        <label class="form-check-label" for="pinned">
+          Anclar
+        </label>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="show_points" formControlName="show_points">
+        <label class="form-check-label" for="show_points">
+          Mostrar Puntos
+        </label>
+    </div>
+    <button class="btn btn-primary" (click)="saveRoute()">Guardar</button>
+    </form>

@@ -1,0 +1,95 @@
+<div class="container">
+  <!--<div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Rutas</label>
+      <select class="form-select" aria-label="Default select example" (change)="getParticipants($event)">
+          <option selected>Seleccionar ruta</option>
+          <option *ngFor="let route of routes" [value]="route.id">{{route.title}}</option>
+      </select>
+  </div>-->
+  <mat-card>
+    <mat-form-field appearance="fill">
+      <mat-label>Selecciona una ruta</mat-label>
+      <mat-select name="routes" (selectionChange)="getParticipants($event)">
+        <mat-option *ngFor="let route of routes" [value]="route.id">
+          {{route.title}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
+  <mat-card>
+    <form [formGroup]="searchForm">
+      <div class="row">
+        <mat-form-field class="width-30 mr-2">
+          <mat-label>Buscar participantes</mat-label>
+          <input matInput formControlName="searchName" (keyup)="filterParticipants('name', $event)">
+        </mat-form-field>
+        <mat-form-field class="width-30 mr-2">
+          <mat-label>Filtrar por categoría</mat-label>
+          <mat-select name="searchCategory" formControlName="searchCategory" (selectionChange)="filterParticipants('category', $event)">
+            <mat-option *ngFor="let category of CATEGORIES" [value]="category.id">
+              {{ category.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="width-30">
+          <mat-label>Filtrar por género</mat-label>
+          <mat-select name="searchGender" formControlName="searchGender" (selectionChange)="filterParticipants('gender', $event)">
+            <mat-option *ngFor="let gender of GENDERS" [value]="gender.id">
+              {{ gender.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field>
+          <mat-label>Ordernar por</mat-label>
+          <mat-select name="searchOrder" formControlName="searchOrder" (selectionChange)="filterParticipants('order', $event)">
+            <mat-option value="points">
+              Puntos
+            </mat-option>
+            <mat-option value="participantName">
+              Nombre
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card>
+  <br>
+  <mat-card class="row">
+    <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th scope="col">Posición</th>
+            <th scope="col">Puntos</th>
+            <th scope="col">Número</th>
+            <th scope="col">Participante</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Email</th>
+            <th scope="col">Ruta</th>
+            <th scope="col">Género</th>
+            <th scope="col"># Checkins</th>
+            <th scope="col"># Retos</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider" *ngFor="let participant of participantsList">
+          <tr (click)="showCheckins(participant.id)" class="cursor-pointer bg-gray-hover">
+            <th><button mat-icon-button><mat-icon mat-list-icon (click)="editParticipant(participant.id)">
+              edit
+            </mat-icon></button></th>
+            <th scope="row">{{ participant.position }}</th>
+            <td>{{ participant.points }}</td>
+            <td>{{ participant.participant_number }}</td>
+            <td>{{ participant.name }}</td>
+            <td>{{ participant.category }}</td>
+            <td>{{ participant.email }}</td>
+            <td>{{ participant.title }}</td>
+            <td>{{ participant.gender }}</td>
+            <td>{{ participant.checkins }}</td>
+            <td>{{ participant.challenges }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card>
+</div>
