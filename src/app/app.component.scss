@@ -1,6 +1,5 @@
 .example-container {
-    height: 800px;
-    border: 1px solid rgba(0, 0, 0, 0.5);
+    min-height: 900px;
   }
   .example-sidenav-content {
     align-items: center;
@@ -29,4 +28,8 @@
   }
   .submenu.expanded {
     transform: scaleY(1);
+  }
+
+  .align-right {
+    text-align: right;
   }

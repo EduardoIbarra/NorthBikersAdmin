@@ -67,6 +67,8 @@ import { CheckInsParticipantDialogComponent } from './components/check-ins-parti
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthComponent } from './components/auth/auth.component';
 
 
 const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
@@ -83,13 +85,14 @@ const MY_NGX_DATE_FORMATS: NgxMatDateFormats = {
 @NgModule({
   declarations: [
     AppComponent,
-    //AuthComponent,
+    AuthComponent,
     AccountComponent,
     EventConfigurationComponent,
     ParticipantsComponent,
     EditParticipantDialogComponent,
     CheckInsParticipantDialogComponent,
     ConfirmDialogComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserAnimationsModule,

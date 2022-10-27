@@ -1,9 +1,9 @@
 <h1 mat-dialog-title>Editar Participante</h1>
 <div mat-dialog-content>
-  <form [formGroup]="form" (ngSubmit)="saveParticipant(form)">
+  <form [formGroup]="form">
     <mat-form-field appearance="standard" class="pad-5 width-100">
         <mat-label>Nombre</mat-label>
-        <input matInput placeholder="" formControlName="name">
+        <input matInput placeholder="" value="{{participantName}}">
     </mat-form-field>
     <div>
         <mat-form-field appearance="standard" class="pad-5 width-50">
@@ -47,5 +47,5 @@
 </div>
 <div mat-dialog-actions class="align-right">
   <button mat-flat-button color="warn" (click)="onNoClick()">Cancelar</button>
-  <button mat-flat-button color="primary" [mat-dialog-close]="" cdkFocusInitial>Aceptar</button>
+  <button mat-flat-button color="primary" (click)="saveParticipant()" [mat-dialog-close]="" cdkFocusInitial>Aceptar</button>
 </div>

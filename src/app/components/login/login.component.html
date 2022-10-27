@@ -1,0 +1,75 @@
+<div *ngIf="user?.id" class="white-shadow-container">
+    <div class="oswald-font">Hola, {{user?.email}}</div>
+    <small>{{user?.id}}</small>
+    <hr />
+    <button mat-flat-button color="warn" (click)="logout()">
+        Salir
+    </button>
+</div>
+
+<div *ngIf="!user?.id" class="login-container">
+    <div id="logo">
+        <img class="width-100" src="assets/logo.jpg" />
+    </div>
+    <div class="access-controls" *ngIf="operation !== 'confirmation_sent'">
+        <form [formGroup]="form">
+            <div class="form-container">
+            <div *ngIf="operation == 'register'">
+                <mat-form-field appearance="standard" class="width-100 pad-5">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput placeholder="Nombre" formControlName="name" type="text">
+                </mat-form-field>
+            </div>
+            <mat-form-field appearance="standard" class="width-100 pad-5">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" formControlName="email" type="email">
+            </mat-form-field>
+            <div class="form-input" *ngIf="operation !== 'password'">
+                <mat-form-field appearance="standard" class="width-100 pad-5">
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput placeholder="Password" formControlName="password" type="password">
+                </mat-form-field>
+            
+            </div>
+            <span *ngIf="operation == 'login'" (click)="resetPassword()" class="forgot-password cursor-pointer" block>Olvidé mi Contraseña</span>
+            <div *ngIf="operation == 'register'" class="form-input">
+                <mat-form-field appearance="standard" class="width-100 pad-5">
+                    <mat-label>Repetir Contraseña</mat-label>
+                    <input matInput placeholder="Repetir Password" formControlName="c_password" type="password">
+                </mat-form-field>
+            </div>
+            <!--<div *ngIf="operation == 'register' || (operation == 'login' && !previouslyAcceptedTerms)" class="container-flex">
+            <ion-checkbox [(ngModel)]="acceptTerms"></ion-checkbox>
+            <span class="terms-toggle-text" (click)="showTermsAndConditions()">He leído y acepto los <strong>términos y condiciones</strong></span>
+            </div>-->
+        </div>
+        </form>
+      <div class="align-right">
+        <!-- <ion-button [disabled]="!acceptTerms" color="light" *ngIf="operation == 'login'" (click)="login()" expand="block">Ingresar</ion-button> -->
+        <button mat-raised-button color="basic" *ngIf="operation == 'login'" (click)="login()" expand="block">Ingresar</button>
+        <button mat-raised-button [disabled]="!credentials.password || !credentials.email || !credentials.name || !credentials.c_password" color="basic" *ngIf="operation == 'register'" (click)="register()" expand="block">Registrarse</button>
+        <button mat-raised-button [disabled]="!credentials.email" color="basic" *ngIf="operation == 'password'" (click)="doResetPassword()" expand="block">Recuperar Password</button>
+        <hr />
+        <!--<ion-button (click)="signInWithFacebook()" *ngIf="operation != 'password'" expand="block" color="warning">
+          <ion-icon slot="start" name="logo-facebook"></ion-icon>
+          Ingresar con Facebook
+        </ion-button>
+        <ion-button (click)="signInWithApple()" *ngIf="operation != 'password'" expand="block" color="light">
+          <ion-icon slot="start" name="logo-apple"></ion-icon>
+          Ingresar con Apple
+        </ion-button> -->
+
+        <div class="secondary-options-container">
+          <span class="cursor-pointer" (click)="operation = 'login'" *ngIf="operation == 'register'">Ya tienes cuenta? <b>Click Aquí</b></span>
+          <span class="cursor-pointer" (click)="operation = 'register'" *ngIf="operation == 'login'">Aun no tienes cuenta? <b>Click Aquí</b></span>
+          <span class="cursor-pointer" (click)="operation = 'login'" *ngIf="operation == 'password'"><b>Cancelar</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="operation === 'confirmation_sent'" class="confirmation-sent-container ion-margin ion-padding">
+      Te hemos enviado un correo de confirmación a {{credentials.email}}. Es necesario que hagas la confirmación para hacer login.
+      <br /><br />
+      <span (click)="operation = 'login'">Ya confirmaste? <b>Click Aquí</b></span>
+    </div>
+  </div>

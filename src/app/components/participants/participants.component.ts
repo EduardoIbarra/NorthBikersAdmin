@@ -6,6 +6,9 @@ import { ParticipantsService } from 'src/app/services/participants.service';
 import { Routes, RouteService } from 'src/app/services/route.service';
 import { CheckInsParticipantDialogComponent } from '../check-ins-participant-dialog/check-ins-participant-dialog.component';
 import { EditParticipantDialogComponent } from '../edit-participant-dialog/edit-participant-dialog.component';
+import { UtilService } from 'src/app/services/util.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-participants',
@@ -17,6 +20,7 @@ export class ParticipantsComponent implements OnInit {
   public participantsList: Array<any> = [];
   public routes: Routes[] | any;
   public result: any;
+  public user: any = null;
   selectedRouteId: any;
   searchForm: FormGroup = new FormGroup({
     searchName: new FormControl(''),
@@ -37,9 +41,20 @@ export class ParticipantsComponent implements OnInit {
   constructor(private participantsService: ParticipantsService,
     private readonly routeService: RouteService,
     private readonly checkinsService: CheckInsService,
+    private utilService: UtilService,
+    private router: Router,
+    private authService: AuthService,
     public dialog: MatDialog) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.user = this.utilService.getUserFromLocalStorage();
+    console.log(this.user);
+    if (!this.user?.id) {
+      this.router.navigateByUrl('login');
+      return;
+    }else{
+      await this.authService.refreshToken();
+    }
     this.getRoutes();
   }
 
@@ -110,7 +125,7 @@ export class ParticipantsComponent implements OnInit {
     console.log(participant);
     const dialogRef = this.dialog.open(EditParticipantDialogComponent, {
       width: '500px',
-      data: {participant: participant[0], gender: gender.id, category: category.id} ,
+      data: {participant: participant[0], gender: gender.id, category: category.id, route_id: this.selectedRouteId} ,
     });
 
     dialogRef.afterClosed().subscribe(result => {

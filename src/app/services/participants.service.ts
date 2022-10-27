@@ -23,4 +23,5 @@ export class ParticipantsService {
       .eq('route_id', routeId)
       .order('points', {ascending: false});
   }
+
 }

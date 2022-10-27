@@ -11,6 +11,7 @@ export class UtilService {
   private baseUrl = 'http://localhost:3000';
   private uploadUrl = '~/../uploads';
   private supabase: SupabaseClient;
+  currentUser: any;
   constructor(private http: HttpClient) { 
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
@@ -54,5 +55,29 @@ export class UtilService {
 
   getFiles(): Observable<any> {
     return this.http.get(`${this.baseUrl}/files`);
+  }
+
+  getUserFromLocalStorage = () => {
+    this.currentUser = JSON.parse(window.localStorage.getItem('nb_user') || '{}');
+    return this.currentUser;
+  }
+
+  setLocalStorage(key: string, value: any, isJson: boolean = true) {
+    if (isJson) {
+      localStorage.setItem(key, JSON.stringify(value))
+    }
+
+    if (!isJson) {
+      localStorage.setItem(key, value)
+    }
+  }
+
+  getLocalStorage(key: string) {
+    const data = localStorage.getItem(key)?.toString();
+    try {
+      return JSON.parse(data || '{}');
+    } catch (e) {
+      return data;
+    }
   }
 }
